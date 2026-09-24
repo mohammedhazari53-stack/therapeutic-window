@@ -18,7 +18,7 @@ export const SITE = {
   author: "Mohammed Hazari",
 
   // Your LinkedIn profile address
-  linkedin: "https://www.linkedin.com/in/mohammedhazari53/",
+  linkedin: "https://www.linkedin.com/in/mohammedhazari53",
 
   // Your Buttondown username (the part after buttondown.com/ on your account)
   // ⚠️ PLACEHOLDER: replace with your username after creating the free Buttondown account
