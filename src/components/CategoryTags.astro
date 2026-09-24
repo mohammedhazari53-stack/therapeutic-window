@@ -1,0 +1,34 @@
+---
+import { categoryByName } from "../lib/posts";
+
+interface Props {
+  categories: string[];
+}
+const { categories } = Astro.props;
+---
+
+<span class="tags">
+  {
+    categories.map((name, i) => (
+      <>
+        {i > 0 && <span class="sep" aria-hidden="true">·</span>}
+        <a class="kicker" href={`/category/${categoryByName(name).slug}/`}>
+          {name}
+        </a>
+      </>
+    ))
+  }
+</span>
+
+<style>
+  .tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    align-items: baseline;
+  }
+  .sep {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+</style>

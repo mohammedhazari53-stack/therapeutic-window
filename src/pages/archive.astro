@@ -1,0 +1,46 @@
+---
+import Base from "../layouts/Base.astro";
+import PostList from "../components/PostList.astro";
+import { getPosts } from "../lib/posts";
+
+const posts = await getPosts();
+
+// Group posts by year, newest first
+const byYear = new Map<number, typeof posts>();
+for (const post of posts) {
+  const year = post.data.date.getUTCFullYear();
+  byYear.set(year, [...(byYear.get(year) ?? []), post]);
+}
+---
+
+<Base title="Archive" description="Every post, newest first.">
+  <div class="container narrow page">
+    <h1>Archive</h1>
+    <p class="desc">Every post, newest first. {posts.length} in total.</p>
+    {
+      [...byYear].map(([year, yearPosts]) => (
+        <section>
+          <h2 class="section-label">{year}</h2>
+          <PostList posts={yearPosts} />
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: 2.5rem;
+  }
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .desc {
+    color: var(--text-muted);
+    margin: 0 0 2.5rem;
+  }
+  section {
+    margin-bottom: 2.5rem;
+  }
+</style>

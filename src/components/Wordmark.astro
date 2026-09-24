@@ -1,0 +1,62 @@
+---
+// The text logo. The two bars on either side of the mark stand for the
+// "window" between an effective dose and a harmful one.
+import { SITE } from "../../site.config.mjs";
+
+interface Props {
+  size?: "sm" | "lg";
+}
+const { size = "sm" } = Astro.props;
+---
+
+<span class={`wordmark ${size}`}>
+  <span class="mark" aria-hidden="true"><span></span></span>
+  <span class="name">{SITE.name}</span>
+</span>
+
+<style>
+  .wordmark {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .mark {
+    flex-shrink: 0;
+    width: 1.05em;
+    height: 1.05em;
+    border-left: 2.5px solid var(--accent);
+    border-right: 2.5px solid var(--accent);
+    display: grid;
+    place-items: center;
+  }
+  .mark span {
+    width: 42%;
+    height: 42%;
+    background: var(--accent);
+  }
+  .name {
+    font-family: var(--serif);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .sm {
+    font-size: 1.1rem;
+    gap: 0.45rem;
+  }
+  @media (min-width: 420px) {
+    .sm {
+      font-size: 1.35rem;
+      gap: 0.6rem;
+    }
+  }
+  .lg {
+    font-size: 2rem;
+  }
+  @media (min-width: 720px) {
+    .sm {
+      font-size: 1.6rem;
+    }
+  }
+</style>

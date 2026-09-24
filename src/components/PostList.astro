@@ -1,0 +1,76 @@
+---
+// A list of posts: category, headline, one-line summary, date.
+import CategoryTags from "./CategoryTags.astro";
+import { formatDate, postUrl, type Post } from "../lib/posts";
+
+interface Props {
+  posts: Post[];
+  showSummary?: boolean;
+}
+const { posts, showSummary = true } = Astro.props;
+---
+
+<ol class="post-list">
+  {
+    posts.map((post) => (
+      <li>
+        <CategoryTags categories={post.data.categories} />
+        <h3>
+          <a href={postUrl(post)}>{post.data.title}</a>
+          {post.data.sample && <span class="sample-pill">Sample</span>}
+          {post.data.draft && <span class="sample-pill">Draft</span>}
+        </h3>
+        {showSummary && <p class="summary">{post.data.summary}</p>}
+        <time class="meta" datetime={post.data.date.toISOString()}>
+          {formatDate(post.data.date)}
+        </time>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .post-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  li {
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  li:first-child {
+    padding-top: 0;
+  }
+  h3 {
+    font-size: 1.3rem;
+    margin: 0.35rem 0 0.4rem;
+  }
+  h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  h3 a:hover {
+    color: var(--accent);
+  }
+  .summary {
+    margin: 0 0 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    max-width: 44rem;
+  }
+  .sample-pill {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    font-family: var(--sans);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid #b45309;
+    color: #b45309;
+    border-radius: 2px;
+  }
+</style>

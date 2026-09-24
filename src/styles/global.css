@@ -1,0 +1,228 @@
+/* ─────────────────────────────────────────────────────────────
+   Site-wide styles. The accent color lives in site.config.mjs;
+   the neutral colors for light and dark mode are defined here.
+   ───────────────────────────────────────────────────────────── */
+
+:root {
+  --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --bg: #fdfcf9;
+  --bg-soft: #f4f2ec;
+  --text: #16181d;
+  --text-muted: #5b606b;
+  --rule: #e2dfd6;
+  --rule-strong: #16181d;
+
+  --measure: 42rem; /* comfortable reading width */
+  --wide: 72rem;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #121418;
+  --bg-soft: #1b1e24;
+  --text: #e9e7e1;
+  --text-muted: #a2a6af;
+  --rule: #2c3038;
+  --rule-strong: #e9e7e1;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121418;
+    --bg-soft: #1b1e24;
+    --text: #e9e7e1;
+    --text-muted: #a2a6af;
+    --rule: #2c3038;
+    --rule-strong: #e9e7e1;
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.18em;
+  text-decoration-thickness: 1px;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--serif);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+@media (min-width: 720px) {
+  .container {
+    padding: 0 2rem;
+  }
+}
+
+.narrow {
+  max-width: calc(var(--measure) + 4rem);
+}
+
+/* Small uppercase label used for categories and section headings */
+.kicker {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+}
+a.kicker:hover {
+  text-decoration: underline;
+}
+
+.meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.section-label {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text);
+  border-top: 2px solid var(--rule-strong);
+  padding-top: 0.6rem;
+  margin: 0 0 1.25rem;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.button {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.55rem 1rem;
+  border-radius: 3px;
+  background: var(--accent);
+  color: var(--bg);
+  border: 1px solid var(--accent);
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.button:hover {
+  filter: brightness(1.1);
+}
+.button.outline {
+  background: transparent;
+  color: var(--accent);
+}
+
+/* Article body typography (posts and the About page) */
+.prose {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  max-width: var(--measure);
+}
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote {
+  margin: 0 0 1.3em;
+}
+.prose h2 {
+  font-size: 1.5rem;
+  margin: 2em 0 0.6em;
+}
+.prose h3 {
+  font-size: 1.2rem;
+  margin: 1.6em 0 0.5em;
+}
+.prose li {
+  margin-bottom: 0.4em;
+}
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--rule);
+  margin: 2.5em 0;
+}
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  margin: 0 0 1.5em;
+  display: block;
+  overflow-x: auto;
+}
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  font-weight: 600;
+}
+.prose code {
+  font-size: 0.85em;
+  background: var(--bg-soft);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}

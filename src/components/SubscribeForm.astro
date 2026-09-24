@@ -1,0 +1,87 @@
+---
+// Buttondown email signup. Your Buttondown username comes from site.config.mjs.
+import { SITE } from "../../site.config.mjs";
+import { buttondownIsPlaceholder } from "../lib/posts";
+
+interface Props {
+  heading?: string;
+  blurb?: string;
+  variant?: "box" | "plain";
+}
+const {
+  heading = `Get ${SITE.name} in your inbox`,
+  blurb = "Biotech funding, clinical and scientific news, read with an investor's and a scientist's eye. Free, and you can unsubscribe anytime.",
+  variant = "box",
+} = Astro.props;
+
+const id = `bd-email-${Math.random().toString(36).slice(2, 8)}`;
+const user = encodeURIComponent(SITE.buttondown);
+---
+
+<section class={`subscribe ${variant}`}>
+  {heading && <h2>{heading}</h2>}
+  {blurb && <p class="blurb">{blurb}</p>}
+  <form
+    action={`https://buttondown.com/api/emails/embed-subscribe/${user}`}
+    method="post"
+    target="popupwindow"
+    onsubmit={`window.open('https://buttondown.com/${user}', 'popupwindow')`}
+    class="embeddable-buttondown-form"
+  >
+    <label for={id} class="visually-hidden">Email address</label>
+    <input type="email" name="email" id={id} placeholder="you@example.com" required />
+    <input type="hidden" value="1" name="embed" />
+    <button type="submit" class="button">Subscribe</button>
+  </form>
+  {
+    buttondownIsPlaceholder && (
+      <p class="warning">
+        Setup needed: add your Buttondown username in site.config.mjs. Until you do, this form won't work.
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .subscribe.box {
+    background: var(--bg-soft);
+    border-top: 3px solid var(--accent);
+    padding: 1.5rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+  .blurb {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    margin: 0 0 1rem;
+    max-width: 36rem;
+  }
+  form {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    max-width: 28rem;
+  }
+  input[type="email"] {
+    flex: 1 1 14rem;
+    min-width: 0;
+    font: inherit;
+    font-size: 0.95rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--bg);
+    color: var(--text);
+  }
+  input[type="email"]:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .warning {
+    margin: 0.75rem 0 0;
+    font-size: 0.78rem;
+    color: #b45309;
+  }
+</style>

@@ -1,0 +1,127 @@
+---
+import Base from "../layouts/Base.astro";
+import CategoryTags from "../components/CategoryTags.astro";
+import PostList from "../components/PostList.astro";
+import SubscribeForm from "../components/SubscribeForm.astro";
+import { SITE } from "../../site.config.mjs";
+import { getPosts, postUrl, formatDate, readingTime } from "../lib/posts";
+
+const posts = await getPosts();
+const [featured, ...rest] = posts;
+const recent = rest.slice(0, 10);
+---
+
+<Base>
+  <div class="container">
+    <p class="intro">{SITE.tagline}</p>
+
+    {
+      featured ? (
+        <div class="layout">
+          <article class="featured">
+            {featured.data.cover && (
+              <a href={postUrl(featured)} class="cover">
+                <img src={featured.data.cover} alt={featured.data.coverAlt ?? ""} />
+              </a>
+            )}
+            <p class="latest">Latest</p>
+            <CategoryTags categories={featured.data.categories} />
+            <h1>
+              <a href={postUrl(featured)}>{featured.data.title}</a>
+            </h1>
+            <p class="dek">{featured.data.summary}</p>
+            <p class="meta">
+              By {SITE.author} · {formatDate(featured.data.date)} · {readingTime(featured.body)}
+              {featured.data.sample && <span class="flag"> · Sample post</span>}
+            </p>
+          </article>
+
+          <aside class="side">
+            <SubscribeForm heading="The newsletter" />
+          </aside>
+        </div>
+      ) : (
+        <p>No posts yet. Add a Markdown file to src/content/posts to publish your first one.</p>
+      )
+    }
+
+    {
+      recent.length > 0 && (
+        <section class="recent">
+          <h2 class="section-label">Recent</h2>
+          <PostList posts={recent} />
+          {rest.length > recent.length && (
+            <p class="more">
+              <a href="/archive/">All posts →</a>
+            </p>
+          )}
+        </section>
+      )
+    }
+  </div>
+</Base>
+
+<style>
+  .intro {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--text-muted);
+    margin: 1.25rem 0 2rem;
+    font-size: 1.05rem;
+  }
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  @media (min-width: 900px) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      gap: 3.5rem;
+    }
+  }
+  .cover img {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    object-fit: cover;
+    margin-bottom: 1.25rem;
+  }
+  .latest {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 0.25rem;
+  }
+  .featured h1 {
+    font-size: clamp(2rem, 5vw, 3.1rem);
+    margin: 0.5rem 0 0.9rem;
+  }
+  .featured h1 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  .featured h1 a:hover {
+    color: var(--accent);
+  }
+  .dek {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin: 0 0 1rem;
+    max-width: 40rem;
+  }
+  .flag {
+    color: #b45309;
+  }
+  .recent {
+    margin-top: 2.5rem;
+  }
+  .more {
+    margin-top: 1.5rem;
+    font-weight: 500;
+  }
+</style>

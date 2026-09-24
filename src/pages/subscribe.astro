@@ -1,0 +1,51 @@
+---
+import Base from "../layouts/Base.astro";
+import SubscribeForm from "../components/SubscribeForm.astro";
+import { SITE } from "../../site.config.mjs";
+---
+
+<Base title="Subscribe" description={`Get ${SITE.name} by email.`}>
+  <div class="container narrow page">
+    <p class="kicker">Newsletter</p>
+    <h1>Subscribe to {SITE.name}</h1>
+    <p class="lede">
+      Biotech news with an investor's and a scientist's eye: what happened, why it matters, and what to watch next.
+    </p>
+    <ul class="what">
+      <li><strong>Funding &amp; Deals.</strong> VC rounds, M&amp;A, IPOs and licensing.</li>
+      <li><strong>Clinical &amp; FDA.</strong> Trial readouts, approvals and regulatory news.</li>
+      <li><strong>Science &amp; Tech.</strong> New research, platforms and modalities.</li>
+      <li><strong>Commentary.</strong> My own takes, clearly labeled.</li>
+    </ul>
+    <SubscribeForm heading="Join the list" blurb="Free. No spam. Unsubscribe with one click." />
+    <p class="alt meta">
+      Prefer a feed reader? Use the <a href="/rss.xml">RSS feed</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: 2.5rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    margin: 0.3rem 0 1rem;
+  }
+  .lede {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--text-muted);
+    margin: 0 0 1.5rem;
+  }
+  .what {
+    padding-left: 1.1rem;
+    margin: 0 0 2rem;
+  }
+  .what li {
+    margin-bottom: 0.4rem;
+  }
+  .alt {
+    margin-top: 1.25rem;
+  }
+</style>

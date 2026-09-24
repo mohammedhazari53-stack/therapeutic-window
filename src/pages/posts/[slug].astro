@@ -1,0 +1,155 @@
+---
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import CategoryTags from "../../components/CategoryTags.astro";
+import PostList from "../../components/PostList.astro";
+import SubscribeForm from "../../components/SubscribeForm.astro";
+import { SITE } from "../../../site.config.mjs";
+import { getPosts, formatDate, readingTime, shareImage, type Post } from "../../lib/posts";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post, posts } }));
+}
+
+interface Props {
+  post: Post;
+  posts: Post[];
+}
+const { post, posts } = Astro.props;
+const { Content } = await render(post);
+const { title, summary, date, categories, cover, coverAlt, sources, sample } = post.data;
+
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+const linkedinShare = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
+const more = posts.filter((p) => p.id !== post.id).slice(0, 3);
+---
+
+<Base title={title} description={summary} image={shareImage(post)} type="article" publishedTime={date}>
+  <article class="container narrow post">
+    {
+      sample && (
+        <div class="sample-banner">
+          <strong>Sample post.</strong> This shows what a post looks like. Edit it or delete the file{" "}
+          <code>src/content/posts/{post.id}.md</code> before you launch.
+        </div>
+      )
+    }
+
+    <header>
+      <CategoryTags categories={categories} />
+      <h1>{title}</h1>
+      <p class="dek">{summary}</p>
+      <p class="byline meta">
+        By <a href="/about/">{SITE.author}</a>{" · "}<time datetime={date.toISOString()}>{formatDate(date)}</time>{" · "}{readingTime(post.body)}
+      </p>
+    </header>
+
+    {cover && <img class="cover" src={cover} alt={coverAlt ?? ""} />}
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      sources && sources.length > 0 && (
+        <section class="sources">
+          <h2 class="section-label">Sources</h2>
+          <ol>
+            {sources.map((s) => (
+              <li>
+                <a href={s.url} target="_blank" rel="noopener">
+                  {s.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )
+    }
+
+    <div class="share">
+      <a class="button outline" href={linkedinShare} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"></path></svg>
+        Share on LinkedIn
+      </a>
+    </div>
+
+    <SubscribeForm />
+
+    {
+      more.length > 0 && (
+        <section class="more">
+          <h2 class="section-label">Keep reading</h2>
+          <PostList posts={more} />
+        </section>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .post {
+    padding-top: 2.5rem;
+  }
+  .sample-banner {
+    border: 1px solid #b45309;
+    color: #b45309;
+    background: color-mix(in srgb, #b45309 7%, transparent);
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    margin-bottom: 2rem;
+    border-radius: 3px;
+  }
+  .sample-banner code {
+    font-size: 0.8rem;
+    word-break: break-all;
+  }
+  h1 {
+    font-size: clamp(2rem, 5.5vw, 2.9rem);
+    margin: 0.6rem 0 1rem;
+  }
+  .dek {
+    font-family: var(--serif);
+    font-size: 1.3rem;
+    line-height: 1.45;
+    color: var(--text-muted);
+    margin: 0 0 1.25rem;
+  }
+  .byline {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--rule);
+    margin: 0 0 2rem;
+  }
+  .byline a {
+    color: var(--text);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .cover {
+    width: 100%;
+    margin: 0 0 2rem;
+  }
+  .sources {
+    margin-top: 3rem;
+  }
+  .sources ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.9rem;
+  }
+  .sources li {
+    margin-bottom: 0.45rem;
+  }
+  .share {
+    margin: 2.5rem 0;
+  }
+  .share .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .more {
+    margin-top: 3.5rem;
+  }
+</style>
