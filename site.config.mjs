@@ -21,8 +21,7 @@ export const SITE = {
   linkedin: "https://www.linkedin.com/in/mohammedhazari53",
 
   // Your Buttondown username (the part after buttondown.com/ on your account)
-  // ⚠️ PLACEHOLDER: replace with your username after creating the free Buttondown account
-  buttondown: "YOUR-BUTTONDOWN-USERNAME",
+  buttondown: "therapeuticwindow",
 
   // The full web address of the site, with no slash at the end.
   // ⚠️ Update this after Netlify gives you an address, and again when you connect your own domain.
