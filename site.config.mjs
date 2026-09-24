@@ -27,7 +27,7 @@ export const SITE = {
 
   // The full web address of the site, with no slash at the end.
   // ⚠️ Update this after Netlify gives you an address, and again when you connect your own domain.
-  url: "https://therapeutic-window.netlify.app",
+  url: "https://fastidious-pika-0e9724.netlify.app",
 
   // The accent color (links, category labels, logo mark).
   // accentColor is used in light mode; accentColorDark is a lighter shade used in dark mode.

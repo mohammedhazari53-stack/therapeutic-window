@@ -44,6 +44,6 @@ try {
   console.log("Select the text above and copy it into a new LinkedIn post.\n");
 }
 
-if (SITE.url.includes("therapeutic-window.netlify.app")) {
-  console.log("Note: the link uses the placeholder address from site.config.mjs. Update `url` there once your site is live.\n");
+if (SITE.url.includes(".netlify.app")) {
+  console.log("Note: the link uses your temporary Netlify address. Update `url` in site.config.mjs when you connect your own domain.\n");
 }
